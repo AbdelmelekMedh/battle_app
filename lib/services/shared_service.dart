@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:battle_app/api/auth_api.dart';
+import 'package:battle_app/main.dart';
 import 'package:battle_app/models/login_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../api/logout_api.dart';
 
 class SharedService {
   static Future<bool> isLoggedIn() async {
@@ -30,12 +31,12 @@ class SharedService {
     return null;
   }
 
-  static Future<void> logout(BuildContext context) async {
+  static Future<void> logout() async {
     final details = await loginDetails();
     if (details != null) {
-      await LogoutApi.logout(details.id);
+      await AuthApi.logout(details.id);
       await setLoginDetails(null);
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      navigatorKey.currentState?.pushNamedAndRemoveUntil('/', (route) => false);
     }
   }
 }

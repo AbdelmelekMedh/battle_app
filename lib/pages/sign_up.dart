@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:battle_app/api/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../api/sign_up_api.dart';
 import '../widgets/gradient_container.dart';
 import '../widgets/text_widget.dart';
 
@@ -44,13 +44,12 @@ class _SignUpState extends State<SignUp> {
       return;
     }
 
-    final res = await SignUpApi.signUp(
+    final res = await AuthApi.signUp(
       _usernameController.text,
       _emailController.text,
       _passwordController.text,
     );
 
-    print(res.body);
     if (res.statusCode == 200 && mounted) {
       Navigator.of(context).pushNamed('/signIn');
     } else if (mounted) {

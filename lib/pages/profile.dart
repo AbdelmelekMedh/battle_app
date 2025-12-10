@@ -33,8 +33,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final details = await SharedService.loginDetails();
     if (details == null) return;
 
-    await ProfileApi.createProfile(details.token, details.id, DateTime.now());
-    final profile = await ProfileApi.getProfile(details.token, details.id);
+    await ProfileApi.createProfile();
+    final profile = await ProfileApi.getProfile();
 
     setState(() {
       userProfileData = ProfileScreenData(details, profile);
@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.black,
           ),
           onPressed: () {
-            SharedService.logout(context);
+            SharedService.logout();
           },
         ),
       ),

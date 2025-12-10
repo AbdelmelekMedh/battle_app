@@ -7,15 +7,15 @@ String loginResponseModelToJson(LoginResponseModel data) =>
     json.encode(data.toJson());
 
 class LoginResponseModel {
-  final String refreshToken;
+  String refreshToken;
   final String id;
   final String username;
   final String email;
   final List<String> roles;
-  final String token;
+  String token;
   final String type;
 
-  const LoginResponseModel({
+  LoginResponseModel({
     required this.refreshToken,
     required this.id,
     required this.username,

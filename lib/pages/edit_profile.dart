@@ -132,6 +132,7 @@ class _EditProfileState extends State<EditProfile> {
               bio: _bioController.text,
               gender: _selectedGender.toString(),
               dateOfBirth: _selectedDate,
+              imageProfile: profile.imageProfile,
               socialLinks: profile.socialLinks, // or parse from text
               interests: _interestsController.text.split(',').map((e) => e.trim()).toList(),
               languages: _languagesController.text.split(',').map((e) => e.trim()).toList(),
@@ -142,8 +143,6 @@ class _EditProfileState extends State<EditProfile> {
             );
 
             bool success = await ProfileApi.updateProfileWithImage(
-              widget.userProfile.details.token,
-              profile.userId,
               updatedProfile,
               _pickedImage,
             );

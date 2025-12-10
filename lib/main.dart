@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'common/route_generator.dart';
 
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 String path = '/';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  bool reslt = await SharedService.isLoggedIn();
-  if (reslt){
+  bool result = await SharedService.isLoggedIn();
+  if (result){
     path = '/home';
   }
   runApp(MyApp());
@@ -20,6 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Battle IU',
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         textTheme: Theme.of(context).textTheme.apply(
           bodyColor: Colors.white,

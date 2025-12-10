@@ -1,7 +1,7 @@
+import 'package:battle_app/api/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../api/sign_in_api.dart';
 import '../models/login_model.dart';
 import '../services/shared_service.dart';
 import '../widgets/gradient_container.dart';
@@ -39,7 +39,7 @@ class _SignInState extends State<SignIn> {
       return;
     }
 
-    final res = await SignInApi.signIn(
+    final res = await AuthApi.signIn(
       _usernameController.text,
       _passwordController.text,
     );
