@@ -9,17 +9,21 @@ class TextWidget extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
+  final int? maxLines;
+  final String? hint;
 
   const TextWidget({
-    Key? key,
+    super.key,
     required this.controller,
+    this.hint,
     this.validator,
     required this.label,
     required this.icon,
     this.obscureText = false,
     required this.keyboardType,
     required this.textInputAction,
-  }) : super(key: key);
+    this.maxLines,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,7 @@ class TextWidget extends StatelessWidget {
             ),
           ),
           Container(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.5),
               borderRadius: BorderRadius.circular(10),
@@ -43,7 +48,10 @@ class TextWidget extends StatelessWidget {
             child: TextFormField(
               controller: controller,
               validator: validator,
+              minLines: maxLines == null ? 1 : null,
+              maxLines: maxLines,
               decoration: InputDecoration(
+                hint: Text(hint?.toString() ?? '', style: const TextStyle(color: Colors.black54)),
                 border: InputBorder.none,
                 prefixIcon: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
