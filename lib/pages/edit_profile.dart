@@ -1,22 +1,21 @@
 import 'dart:io';
 
 import 'package:battle_app/common/social_platform.dart';
-import 'package:battle_app/pages/profile.dart';
+import 'package:battle_app/controllers/profile_controller.dart';
+import 'package:battle_app/repository/languages_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-import '../api/profile_api.dart';
 import '../models/profile_model.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/gradient_container.dart';
 import '../widgets/text_widget.dart';
 
 class EditProfile extends StatefulWidget {
-  final ProfileScreenData userProfile;
-
-  const EditProfile({super.key, required this.userProfile});
+  const EditProfile({super.key});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -38,10 +37,13 @@ class _EditProfileState extends State<EditProfile> {
   String? _selectedGender;
   final List<String> _listGender = ["Male", "Female", "Other"];
 
+  final ProfileController controller = Get.find<ProfileController>();
+  final userProfile = Get.arguments;
+
   @override
   void initState() {
     super.initState();
-    final profile = widget.userProfile.profile;
+    final profile = userProfile.profile;
     if (profile != null) {
       _fullNameController.text = profile.name ?? '';
       _addressController.text = profile.address ?? '';
@@ -177,7 +179,7 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = widget.userProfile.profile;
+    final profile = userProfile.profile;
     final imageUrl = profile?.imageProfile?.filePathUrl != null
         ? 'http://10.0.2.2:8080${profile?.imageProfile?.filePathUrl}'
         : 'https://via.placeholder.com/150';
@@ -196,6 +198,7 @@ class _EditProfileState extends State<EditProfile> {
             color: Colors.black,
           ),
           onPressed: () async {
+            final profile = controller.profileData.value!.profile!;
             final updatedProfile = ProfileModel(
               userId: profile!.userId,
               name: _fullNameController.text,
@@ -214,18 +217,20 @@ class _EditProfileState extends State<EditProfile> {
               active: false,
             );
 
-            bool success = await ProfileApi.updateProfileWithImage(
-              updatedProfile,
-              _pickedImage,
-            );
+            bool success = await controller.updateProfile(updatedProfile, _pickedImage);
 
             if (success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Profile updated successfully!")),
+              Get.back(); // 🔥 ProfileScreen refreshes automatically
+              Get.snackbar(
+                'Success',
+                'Profile updated successfully',
+                snackPosition: SnackPosition.BOTTOM,
               );
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Failed to update profile.")),
+              Get.snackbar(
+                'Error',
+                'Failed to update profile',
+                snackPosition: SnackPosition.BOTTOM,
               );
             }
 
@@ -492,88 +497,4 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 }
-
-final List<String> languages = [
-  "Arabic",
-  "English",
-  "French",
-  "Spanish",
-  "German",
-  "Italian",
-  "Portuguese",
-  "Russian",
-  "Mandarin Chinese",
-  "Cantonese",
-  "Japanese",
-  "Korean",
-  "Hindi",
-  "Urdu",
-  "Bengali",
-  "Punjabi",
-  "Gujarati",
-  "Marathi",
-  "Tamil",
-  "Telugu",
-  "Kannada",
-  "Malayalam",
-  "Sinhala",
-  "Nepali",
-  "Pashto",
-  "Persian (Farsi)",
-  "Turkish",
-  "Kurdish",
-  "Hebrew",
-  "Greek",
-  "Dutch",
-  "Swedish",
-  "Norwegian",
-  "Danish",
-  "Finnish",
-  "Polish",
-  "Czech",
-  "Slovak",
-  "Hungarian",
-  "Romanian",
-  "Bulgarian",
-  "Serbian",
-  "Croatian",
-  "Bosnian",
-  "Slovenian",
-  "Ukrainian",
-  "Belarusian",
-  "Lithuanian",
-  "Latvian",
-  "Estonian",
-  "Thai",
-  "Vietnamese",
-  "Myanmar (Burmese)",
-  "Khmer",
-  "Lao",
-  "Malay",
-  "Indonesian",
-  "Filipino (Tagalog)",
-  "Javanese",
-  "Sundanese",
-  "Swahili",
-  "Amharic",
-  "Somali",
-  "Yoruba",
-  "Igbo",
-  "Hausa",
-  "Zulu",
-  "Xhosa",
-  "Afrikaans",
-  "Maori",
-  "Samoan",
-  "Tongan",
-  "Mongolian",
-  "Armenian",
-  "Georgian",
-  "Albanian",
-  "Icelandic",
-  "Irish",
-  "Welsh",
-  "Basque",
-  "Catalan"
-];
 

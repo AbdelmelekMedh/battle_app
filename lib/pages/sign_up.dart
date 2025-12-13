@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:battle_app/api/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 import '../widgets/gradient_container.dart';
 import '../widgets/text_widget.dart';
@@ -51,7 +52,7 @@ class _SignUpState extends State<SignUp> {
     );
 
     if (res.statusCode == 200 && mounted) {
-      Navigator.of(context).pushNamed('/signIn');
+      Get.toNamed('/signIn');
     } else if (mounted) {
       final body = json.decode(res.body);
       final errors = body['errors'];

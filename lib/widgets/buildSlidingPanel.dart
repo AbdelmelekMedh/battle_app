@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class BuildSlidingPanel extends StatelessWidget {
   const BuildSlidingPanel({
@@ -88,10 +89,7 @@ class BuildSlidingPanel extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 15,
                     child: ElevatedButton(
                       onPressed: () {
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
-                        Navigator.of(context).pushNamed(
-                          '/signUp',
-                        );
+                        Get.toNamed('/signUp');
                         print('button Mail');
                       },
                       style: ElevatedButton.styleFrom(
@@ -135,8 +133,7 @@ class BuildSlidingPanel extends StatelessWidget {
                       SizedBox(width: MediaQuery.of(context).size.width / 50),
                       TextButton(
                         onPressed: () {
-                          //Navigator.push(context, new MaterialPageRoute(builder: (context) => SignIn()));
-                          Navigator.of(context).pushNamed('/signIn');
+                          Get.toNamed('/signIn');
                           print("log in");
                         },
                         child: const Text(

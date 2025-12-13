@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class SocialAction extends StatefulWidget {
   const SocialAction({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _SocialActionState extends State<SocialAction> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           onPressed: () {
-            Navigator.of(context).pushNamed('/friendProfile');
+            Get.toNamed('/friendProfile');
             print("FollowAction");
           },
           child: getFollowAction(),
@@ -30,7 +31,7 @@ class _SocialActionState extends State<SocialAction> {
           elevation: 0,
           backgroundColor: Colors.grey.withOpacity(0.8),
           onPressed: () {
-            Navigator.of(context).pushNamed('/map');
+            Get.toNamed('/map');
             print("SocialAction 1");
           },
           child: const Icon(FontAwesomeIcons.mapMarkerAlt,

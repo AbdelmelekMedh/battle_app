@@ -1,6 +1,7 @@
 import 'package:battle_app/api/auth_api.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 import '../models/login_model.dart';
 import '../services/shared_service.dart';
@@ -49,7 +50,7 @@ class _SignInState extends State<SignIn> {
       if (logResModel.token.isNotEmpty) {
         await SharedService.setLoginDetails(logResModel);
         if (mounted) {
-          Navigator.of(context).pushNamed('/home', arguments: logResModel);
+          Get.toNamed('/home', arguments: logResModel);
         }
       }
     } else {

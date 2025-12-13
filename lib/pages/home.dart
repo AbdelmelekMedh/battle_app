@@ -3,6 +3,7 @@ import 'package:battle_app/pages/dashboard.dart';
 import 'package:battle_app/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 import 'explore.dart';
 
@@ -46,7 +47,7 @@ class _HomeState extends State<Home> {
         ),
         child: Image.asset('assets/images/playlist.png'),
         onPressed: (){
-          Navigator.of(context).pushNamed('/Map');
+          Get.toNamed('/Map');
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

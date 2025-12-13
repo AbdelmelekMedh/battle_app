@@ -1,7 +1,8 @@
 import 'package:battle_app/services/shared_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import 'common/route_generator.dart';
+import 'Routes/route_generator.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -19,9 +20,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Battle IU',
+      title: 'Battle App',
       navigatorKey: navigatorKey,
       theme: ThemeData(
         textTheme: Theme.of(context).textTheme.apply(
@@ -30,8 +31,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: path,
-      onGenerateRoute: RouteGenerator.generateRoute,
-
+      getPages: RouteGenerator.pages,
     );
   }
 }
