@@ -97,6 +97,7 @@ class _SignInState extends State<SignIn> {
                           controller: _usernameController,
                           label: 'Username',
                           icon: FontAwesomeIcons.user,
+                          maxLines: 1,
                           keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
                           validator: (value) => (value?.isEmpty ?? true)
@@ -108,6 +109,7 @@ class _SignInState extends State<SignIn> {
                           label: 'Password',
                           icon: FontAwesomeIcons.lock,
                           obscureText: true,
+                          maxLines: 1,
                           keyboardType: TextInputType.visiblePassword,
                           textInputAction: TextInputAction.done,
                           validator: (value) => (value?.isEmpty ?? true)

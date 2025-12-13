@@ -106,6 +106,7 @@ class _SignUpState extends State<SignUp> {
                           controller: _usernameController,
                           label: 'Username',
                           icon: FontAwesomeIcons.user,
+                          maxLines: 1,
                           keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
                           validator: (value) =>
@@ -116,6 +117,7 @@ class _SignUpState extends State<SignUp> {
                           controller: _emailController,
                           label: 'Your email',
                           icon: FontAwesomeIcons.envelope,
+                          maxLines: 1,
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
                           validator: (value) =>
@@ -127,6 +129,7 @@ class _SignUpState extends State<SignUp> {
                           label: 'Create a password',
                           icon: FontAwesomeIcons.lock,
                           obscureText: true,
+                          maxLines: 1,
                           keyboardType: TextInputType.visiblePassword,
                           textInputAction: TextInputAction.next,
                           validator: (value) => (value?.isEmpty ?? true)
@@ -139,6 +142,7 @@ class _SignUpState extends State<SignUp> {
                           label: 'Confirm password',
                           icon: FontAwesomeIcons.lock,
                           obscureText: true,
+                          maxLines: 1,
                           keyboardType: TextInputType.visiblePassword,
                           textInputAction: TextInputAction.done,
                           validator: (value) {

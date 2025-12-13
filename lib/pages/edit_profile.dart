@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:battle_app/common/social_platform.dart';
 import 'package:battle_app/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../api/profile_api.dart';
@@ -27,7 +27,7 @@ class _EditProfileState extends State<EditProfile> {
   final _addressController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _bioController = TextEditingController();
-  final _socialLinksController = TextEditingController();
+  Map<String, String> _socialLinks = {};
   final _interestsController = TextEditingController();
   List<String> _selectedLanguages = [];
 
@@ -47,15 +47,18 @@ class _EditProfileState extends State<EditProfile> {
       _addressController.text = profile.address ?? '';
       _phoneNumberController.text = profile.phoneNumber ?? '';
       _bioController.text = profile.bio ?? '';
-      _socialLinksController.text = profile.socialLinks!.links.entries
-          .map((e) => '${e.key}:${e.value}')
-          .join(', ') ?? '';
+
+      _socialLinks = Map<String, String>.from(
+        profile.socialLinks?.links ?? {},
+      );
 
       _interestsController.text = profile.interests.join(', ');
       _selectedLanguages = List<String>.from(profile.languages);
+
       if (profile.dateOfBirth != null) {
         _selectedDate = profile.dateOfBirth;
       }
+
       if (_listGender.contains(profile.gender)) {
         _selectedGender = profile.gender;
       }
@@ -68,7 +71,6 @@ class _EditProfileState extends State<EditProfile> {
     _addressController.dispose();
     _phoneNumberController.dispose();
     _bioController.dispose();
-    _socialLinksController.dispose();
     _interestsController.dispose();
     super.dispose();
   }
@@ -100,6 +102,79 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+  void _openSocialLinkSheet(SocialPlatform platform) {
+    final controller = TextEditingController(
+      text: _socialLinks[platform.key],
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white.withOpacity(0.5),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Padding(
+          padding: EdgeInsets.fromLTRB(
+            16,
+            16,
+            16,
+            MediaQuery.of(context).viewInsets.bottom + 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(platform.icon),
+                  SizedBox(width: 10),
+                  Text(
+                    platform.label,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: 'Paste your ${platform.label} link',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (controller.text.trim().isEmpty) {
+                            _socialLinks.remove(platform.key);
+                          } else {
+                            _socialLinks[platform.key] =
+                                controller.text.trim();
+                          }
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Text('Save'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final profile = widget.userProfile.profile;
@@ -130,7 +205,7 @@ class _EditProfileState extends State<EditProfile> {
               gender: _selectedGender.toString(),
               dateOfBirth: _selectedDate,
               imageProfile: profile.imageProfile,
-              socialLinks: profile.socialLinks, // or parse from text
+              socialLinks: SocialLinks(links: _socialLinks),
               interests: _interestsController.text.split(',').map((e) => e.trim()).toList(),
               languages: List<String>.from(_selectedLanguages),
               id: profile.id,
@@ -227,13 +302,49 @@ class _EditProfileState extends State<EditProfile> {
                     maxLines: null,
                   ),
                   const SizedBox(height: 10),
-                  TextWidget(
-                    controller: _socialLinksController,
-                    label: 'Social Links',
-                    icon: FontAwesomeIcons.link,
-                    keyboardType: TextInputType.url,
-                    textInputAction: TextInputAction.next,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, bottom: 5),
+                        child: Text(
+                          'Social Links',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: socialPlatforms.map((platform) {
+                            final hasLink = _socialLinks.containsKey(platform.key);
+
+                            return ListTile(
+                              leading: Icon(platform.icon, color: Colors.black54),
+                              title: Text(platform.label),
+                              subtitle: hasLink
+                                  ? Text(
+                                _socialLinks[platform.key]!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                                  : Text('Add link'),
+                              trailing: Icon(
+                                hasLink
+                                    ? FontAwesomeIcons.pen
+                                    : FontAwesomeIcons.plus,
+                                size: 16,
+                              ),
+                              onTap: () => _openSocialLinkSheet(platform),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                   ),
+
                   const SizedBox(height: 10),
                   TextWidget(
                     controller: _interestsController,
@@ -244,57 +355,55 @@ class _EditProfileState extends State<EditProfile> {
                     textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 10),
-        MultiSelectBottomSheetField<String?>(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.transparent),
-          ),
-          searchHint: 'Search',
-          searchTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          searchHintStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          searchIcon:  Icon(FontAwesomeIcons.magnifyingGlass, color: Colors.white, size: 18),
-          closeSearchIcon: const Icon(FontAwesomeIcons.xmark, color: Colors.white, size: 18),
-          cancelText: Text("Cancel", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          confirmText: Text("Confirm", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          backgroundColor: Colors.white.withOpacity(0.5),
-          listType: MultiSelectListType.CHIP,
-          itemsTextStyle:const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
-          items: languages
-              .map((lang) => MultiSelectItem<String?>(lang, lang))
-              .toList(),
-          initialValue: _selectedLanguages.cast<String?>(),
-          searchable: true,
-          title: Text("Select languages", style: const TextStyle(fontWeight: FontWeight.bold)),
-          buttonText: Text("Languages",
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          chipDisplay: MultiSelectChipDisplay(
-            textStyle: TextStyle(color: Colors.black54, fontSize: 15),
-            chipColor: Colors.transparent,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.black26),
-            ),
-            onTap: (value) {
-              setState(() {
-                _selectedLanguages.remove(value);
-              });
-            },
-          ),
+                  MultiSelectBottomSheetField<String?>(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.transparent),
+                    ),
+                    searchHint: 'Search',
+                    searchTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    searchHintStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    searchIcon:  Icon(FontAwesomeIcons.magnifyingGlass, color: Colors.white, size: 18),
+                    closeSearchIcon: const Icon(FontAwesomeIcons.xmark, color: Colors.white, size: 18),
+                    cancelText: Text("Cancel", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    confirmText: Text("Confirm", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    backgroundColor: Colors.white.withOpacity(0.5),
+                    listType: MultiSelectListType.CHIP,
+                    itemsTextStyle:const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),
+                    items: languages
+                        .map((lang) => MultiSelectItem<String?>(lang, lang))
+                        .toList(),
+                    initialValue: _selectedLanguages.cast<String?>(),
+                    searchable: true,
+                    title: Text("Select languages", style: const TextStyle(fontWeight: FontWeight.bold)),
+                    buttonText: Text("Languages",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    chipDisplay: MultiSelectChipDisplay(
+                      textStyle: TextStyle(color: Colors.black54, fontSize: 15),
+                      chipColor: Colors.transparent,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.black26),
+                      ),
+                      onTap: (value) {
+                        setState(() {
+                          _selectedLanguages.remove(value);
+                        });
+                      },
+                    ),
 
-          onConfirm: (List<String?> results) {
-            setState(() {
-              _selectedLanguages = results.whereType<String>().toList();
-            });
-          },
+                    onConfirm: (List<String?> results) {
+                      setState(() {
+                        _selectedLanguages = results.whereType<String>().toList();
+                      });
+                    },
 
-          buttonIcon: Icon(FontAwesomeIcons.language, color: Colors.white, size: 18),
+                    buttonIcon: Icon(FontAwesomeIcons.add, color: Colors.white, size: 18),
 
-        ),
-
-
-        const SizedBox(height: 15),
+                  ),
+                  const SizedBox(height: 15),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
