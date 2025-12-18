@@ -1,3 +1,4 @@
+import 'package:battle_app/bindings/video_binding.dart';
 import 'package:battle_app/services/shared_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: VideoBinding(),
       debugShowCheckedModeBanner: false,
       title: 'Battle App',
       navigatorKey: navigatorKey,

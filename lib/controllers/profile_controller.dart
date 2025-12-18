@@ -38,11 +38,9 @@ class ProfileController extends GetxController {
       updatedProfile,
       pickedImage,
     );
-
     if (success) {
       await loadProfile(); // 🔥 auto refresh everywhere
     }
-
     return success;
   }
 }

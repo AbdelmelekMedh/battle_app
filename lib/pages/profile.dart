@@ -9,7 +9,7 @@ import '../widgets/gradient_container.dart';
 import '../widgets/profile_widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
           children: [
             const GradientContainer(),
             SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 70),
+              padding: const EdgeInsets.symmetric(vertical: 80),
               child: Column(
                 children: [
                   Row(

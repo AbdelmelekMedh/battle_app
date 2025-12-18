@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:battle_app/api/auth_api.dart';
 import 'package:battle_app/main.dart';
 import 'package:battle_app/models/login_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

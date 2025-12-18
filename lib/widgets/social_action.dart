@@ -14,73 +14,78 @@ class _SocialActionState extends State<SocialAction> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        FloatingActionButton(
-          heroTag: "follow",
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          onPressed: () {
-            Get.toNamed('/friendProfile');
-            print("FollowAction");
-          },
-          child: getFollowAction(),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height / 150), //10
-        FloatingActionButton(
-          heroTag: "social 1",
-          elevation: 0,
-          backgroundColor: Colors.grey.withOpacity(0.8),
-          onPressed: () {
-            Get.toNamed('/map');
-            print("SocialAction 1");
-          },
-          child: const Icon(FontAwesomeIcons.mapMarkerAlt,
-              size: 25.0, color: Colors.black),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height / 150), //10
-        FloatingActionButton(
-          heroTag: "social 2",
-          elevation: 0,
-          backgroundColor: Colors.grey.withOpacity(0.8),
-          onPressed: () {
-            print("socialAction 2");
-          },
-          child: getSocialAction(
-              title: '1.2M', icon: FontAwesomeIcons.solidHeart),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height / 150), //10
-        FloatingActionButton(
-          heroTag: "social 3",
-          elevation: 0,
-          backgroundColor: Colors.grey.withOpacity(0.8),
-          onPressed: () {
-            print("socialAction 3");
-          },
-          child: getSocialAction(
-              title: '1.5K', icon: FontAwesomeIcons.solidCommentAlt),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height / 150), //10
-        FloatingActionButton(
-          heroTag: "social 4",
-          elevation: 0,
-          backgroundColor: Colors.grey.withOpacity(0.8),
-          onPressed: () {
-            print("SocialAction 4");
-          },
-          child: Image.asset('assets/images/output-onlinepngtools.png'),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height / 150), //10
-        FloatingActionButton(
-          heroTag: "social 5",
-          elevation: 0,
-          backgroundColor: Colors.grey.withOpacity(0.8),
-          onPressed: () {
-            print("SocialAction 5");
-          },
-          child: const Icon(FontAwesomeIcons.shareAlt,
-              size: 25.0, color: Colors.black),
-        ),
-      ]),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 20,bottom: 20),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+          FloatingActionButton(
+            heroTag: "follow",
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            onPressed: () {
+              Get.toNamed('/friendProfile');
+              print("FollowAction");
+            },
+            child: getFollowAction(),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height / 150), //10
+          FloatingActionButton(
+            heroTag: "social 1",
+            elevation: 0,
+            backgroundColor: Colors.grey.withOpacity(0.8),
+            onPressed: () {
+              Get.toNamed('/map');
+              print("SocialAction 1");
+            },
+            child: const Icon(FontAwesomeIcons.mapMarkerAlt,
+                size: 25.0, color: Colors.black),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height / 150), //10
+          FloatingActionButton(
+            heroTag: "social 2",
+            elevation: 0,
+            backgroundColor: Colors.grey.withOpacity(0.8),
+            onPressed: () {
+              print("socialAction 2");
+            },
+            child: getSocialAction(
+                title: '1.2M', icon: FontAwesomeIcons.solidHeart),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height / 150), //10
+          FloatingActionButton(
+            heroTag: "social 3",
+            elevation: 0,
+            backgroundColor: Colors.grey.withOpacity(0.8),
+            onPressed: () {
+              print("socialAction 3");
+            },
+            child: getSocialAction(
+                title: '1.5K', icon: FontAwesomeIcons.solidCommentAlt),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height / 150), //10
+          FloatingActionButton(
+            heroTag: "social 4",
+            elevation: 0,
+            backgroundColor: Colors.grey.withOpacity(0.8),
+            onPressed: () {
+              print("SocialAction 4");
+            },
+            child: Image.asset('assets/images/output-onlinepngtools.png'),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height / 150), //10
+          FloatingActionButton(
+            heroTag: "social 5",
+            elevation: 0,
+            backgroundColor: Colors.grey.withOpacity(0.8),
+            onPressed: () {
+              print("SocialAction 5");
+            },
+            child: const Icon(FontAwesomeIcons.shareAlt,
+                size: 25.0, color: Colors.black),
+          ),
+        ]),
+      ),
     );
   }
 

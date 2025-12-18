@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:battle_app/main.dart';
 import 'package:battle_app/services/shared_service.dart';
 import 'package:battle_app/api/auth_api.dart';

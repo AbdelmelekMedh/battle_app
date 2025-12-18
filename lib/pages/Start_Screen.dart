@@ -1,147 +1,78 @@
+import 'package:battle_app/api/video_api.dart';
+import 'package:battle_app/models/video_model.dart';
+import 'package:battle_app/widgets/buildSlidingPanel.dart';
+import 'package:battle_app/widgets/video_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:video_player/video_player.dart';
-
-import '../repository/fake_repository.dart';
-import '../widgets/buildSlidingPanel.dart';
-import '../widgets/music_icon.dart';
-import '../widgets/video_Description.dart';
 
 class Start_Screen extends StatefulWidget {
-
   @override
-  _Start_ScreenState createState() => _Start_ScreenState();
+  State<Start_Screen> createState() => _Start_ScreenState();
 }
 
-class _Start_ScreenState extends State<Start_Screen> with SingleTickerProviderStateMixin {
+class _Start_ScreenState extends State<Start_Screen>
+    with SingleTickerProviderStateMixin {
 
-  late VideoPlayerController _videoPlayerController;
-  bool _isPlaying = true;
+  final VideoApi api = VideoApi.to;
+
+  List<VideoModel> videos = [];
+  bool isLoading = true;
+
   late AnimationController _animationController;
 
   @override
   void initState() {
-    _videoPlayerController = VideoPlayerController.asset('videos/intro.mp4')
-      ..initialize()
-      ..setLooping(true)
-      ..play().then((value) {
-        setState(() {});
-      });
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 10));
-    _animationController.repeat();
     super.initState();
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10))
+      ..repeat();
+
+    _loadVideos();
+  }
+
+  Future<void> _loadVideos() async {
+    try {
+      videos = await api.fetchPublicVideos();
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
-        body: SlidingUpPanel(
-          color: Colors.white.withOpacity(0.25),
-          minHeight: MediaQuery.of(context).size.width/2.5,
-          panelBuilder: (scrollController) => BuildSlidingPanel(
-            scrollController: scrollController,
-          ),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-
-          body: ResponsiveBuilder(
-              builder: (BuildContext context, SizingInformation sizingInformation){
-                return Stack(
-                    children: <Widget>[
-                      PageView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: FakeRepository.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Stack(
-                            children: <Widget>[
-                              _videoPlayerController.value.isInitialized
-                                  ? Container(
-                                child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        if (_videoPlayerController
-                                            .value.isPlaying) {
-                                          _isPlaying = false;
-                                          _videoPlayerController.pause();
-                                        } else {
-                                          _isPlaying = true;
-                                          _videoPlayerController.play();
-                                        }
-                                      });
-                                    },
-                                    child: VideoPlayer(_videoPlayerController)),
-                              )
-                                  : Container(),
-                              _isPlaying == false
-                                  ? Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(.4),
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                                  child: Icon(
-                                    Icons.play_arrow,
-                                    size: 95,
-                                  ),
-                                ),
-                              )
-                                  : Container(),
-                              Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    Column(
-                                      children: [
-                                        VideoDescription(),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        MusicIcon(),
-                                      ],
-                                    ),
-                                  ]
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-
-                    ],
-                  );
-              }
-          )
+      body: SlidingUpPanel(
+        color: Colors.white.withOpacity(0.25),
+        minHeight: MediaQuery.of(context).size.width / 2.5,
+        panelBuilder: (scrollController) =>
+            BuildSlidingPanel(scrollController: scrollController),
+        borderRadius:
+        const BorderRadius.vertical(top: Radius.circular(10)),
+        body: PageView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: videos.length,
+          itemBuilder: (context, index) {
+            return VideoItem(
+              video: videos[index],
+              animationController: _animationController,
+            );
+          },
         ),
+      ),
     );
   }
 
-  Widget get middleSection =>Expanded(
-      child: Row(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Column(
-              children: [
-                VideoDescription(),
-              ],
-            ),
-            Column(
-                children: [
-                  MusicIcon(),
-                ],
-            ),
-          ]
-      ),
-  );
   @override
   void dispose() {
     _animationController.dispose();
-    _videoPlayerController.dispose();
     super.dispose();
   }
 }

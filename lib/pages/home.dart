@@ -55,10 +55,8 @@ class _HomeState extends State<Home> {
         color: Colors.transparent.withOpacity(0.2),
         elevation: 0,
         shape: CircularNotchedRectangle(),
-        notchMargin: 10,
         child: Container(
           color: Colors.transparent,
-          height: 60,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children:<Widget> [
