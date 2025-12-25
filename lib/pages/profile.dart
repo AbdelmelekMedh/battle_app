@@ -27,7 +27,7 @@ class ProfileScreen extends StatelessWidget {
       final userProfile = controller.profileData.value!;
       final imageUrl = userProfile.profile?.imageProfile?.filePathUrl != null
           ? 'http://10.0.2.2:8080${userProfile.profile!.imageProfile!.filePathUrl}'
-          : 'https://via.placeholder.com/150';
+          : 'https://secure.gravatar.com/avatar/ef4a9338dca42372f15427cdb4595ef7';
 
       return Scaffold(
         extendBodyBehindAppBar: true,

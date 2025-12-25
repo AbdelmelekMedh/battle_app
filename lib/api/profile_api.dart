@@ -23,11 +23,10 @@ class ProfileApi {
     });
   }
 
-  static Future<ProfileModel?> getProfile() async {
-    final details = await SharedService.loginDetails();
+  static Future<ProfileModel?> getProfile(userId) async {
     final response = await ApiHelper.authorizedRequest((token) {
       return http.get(
-        Uri.parse("http://10.0.2.2:8080/api/profile/${details!.id}"),
+        Uri.parse("http://10.0.2.2:8080/api/profile/$userId"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",

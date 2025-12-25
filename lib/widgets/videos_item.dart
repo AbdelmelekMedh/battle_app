@@ -1,5 +1,4 @@
 import 'package:battle_app/models/resource_file_stream_model.dart';
-import 'package:battle_app/services/shared_service.dart';
 import 'package:battle_app/widgets/social_action.dart';
 import 'package:battle_app/widgets/video_Description.dart';
 import 'package:flutter/cupertino.dart';
@@ -76,7 +75,7 @@ class _VideoItemState extends State<VideosItem> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             VideoDescription(authorName: widget.video.authorName,description: widget.video.description),
-            SocialAction(),
+            SocialAction(video: widget.video,),
           ],
         ),
       ],

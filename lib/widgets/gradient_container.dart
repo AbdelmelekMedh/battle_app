@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GradientContainer extends StatelessWidget {
-  const GradientContainer({Key? key}) : super(key: key);
+  final Widget? child;
+  const GradientContainer({Key? key, this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class GradientContainer extends StatelessWidget {
           ],
         ),
       ),
+      child: child,
     );
   }
 }

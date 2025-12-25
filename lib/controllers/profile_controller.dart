@@ -24,7 +24,7 @@ class ProfileController extends GetxController {
     }
 
     await ProfileApi.createProfile();
-    final profile = await ProfileApi.getProfile();
+    final profile = await ProfileApi.getProfile(details.id);
 
     profileData.value = ProfileScreenData(details, profile);
     isLoading.value = false;
